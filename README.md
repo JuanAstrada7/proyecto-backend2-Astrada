@@ -1,4 +1,4 @@
-# Ecommerce Backend - CRUD de Usuarios
+# Ecommerce Backend
 
 ## Características
 
