@@ -32,7 +32,7 @@
 npm install
 
 # Crear variables de entorno
-crear Archivo .env
+copiar .env .env.example
 
 # Ejecutar en desarrollo
 npm run dev
@@ -45,14 +45,17 @@ MONGO_URL=mongodb://localhost:27017/ecommerce
 JWT_SECRET=tu_jwt_secret_aqui
 SESSION_SECRET=tu_session_secret_aqui
 
-## 🔒 Seguridad
+## Seguridad
 
 - Contraseñas encriptadas con bcrypt
 - Tokens JWT para autenticación
 - Autorización por roles
 - Validaciones de acceso
 
-## 📚 Tecnologías
+### Archivos de Pruebas:
+- `Ecommer API.postman_collection.json` - Colección exportada de Postman
+
+## Tecnologías
 
 - Node.js
 - Express.js
