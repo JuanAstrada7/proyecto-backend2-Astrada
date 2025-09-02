@@ -6,14 +6,12 @@ const router = express.Router();
 
 router.post('/login', passport.authenticate('login', { session: false }), (req, res) => {
   try {
+    console.log('Usuario logueado:', req.user.email);
     const token = generateToken(req.user);
-    
-    console.log('Token generado:', token);
-    console.log('Longitud del token:', token.length);
     
     res.json({
       message: 'Login exitoso',
-      user: req.user.toPublicJSON(),
+      user: req.user.obtenerDatosPublicos(),
       token
     });
   } catch (error) {
@@ -24,10 +22,12 @@ router.post('/login', passport.authenticate('login', { session: false }), (req, 
 
 router.get('/current', passport.authenticate('jwt', { session: false }), (req, res) => {
   try {
+    console.log('Usuario actual obtenido:', req.user.email);
     res.json({
-      user: req.user.toPublicJSON()
+      user: req.user.obtenerDatosPublicos()
     });
   } catch (error) {
+    console.error('Error al obtener usuario actual:', error);
     res.status(500).json({ error: 'Error al obtener usuario actual' });
   }
 });
