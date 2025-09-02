@@ -7,7 +7,7 @@ const router = express.Router();
 router.get('/:id', verificarUsuario, async (req, res) => {
   try {
     const cart = await Cart.findById(req.params.id).populate('products.product');
-    
+
     if (!cart) {
       return res.status(404).json({ error: 'Carrito no encontrado' });
     }
@@ -27,7 +27,7 @@ router.post('/', verificarUsuario, async (req, res) => {
     const cart = new Cart({
       user: req.user._id
     });
-    
+
     await cart.save();
     res.status(201).json(cart);
   } catch (error) {

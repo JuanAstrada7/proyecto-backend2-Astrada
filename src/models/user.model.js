@@ -41,18 +41,18 @@ const userSchema = new mongoose.Schema({
   timestamps: true
 });
 
-userSchema.pre('save', function(next) {
+userSchema.pre('save', function (next) {
   if (!this.isModified('password')) return next();
-  
+
   this.password = bcrypt.hashSync(this.password, 10);
   next();
 });
 
-userSchema.methods.verificarContraseña = function(contraseña) {
+userSchema.methods.verificarContraseña = function (contraseña) {
   return bcrypt.compareSync(contraseña, this.password);
 };
 
-userSchema.methods.obtenerDatosPublicos = function() {
+userSchema.methods.obtenerDatosPublicos = function () {
   const datosUsuario = this.toObject();
   delete datosUsuario.password;
   return datosUsuario;

@@ -8,7 +8,7 @@ router.post('/login', passport.authenticate('login', { session: false }), (req, 
   try {
     console.log('Usuario logueado:', req.user.email);
     const token = generateToken(req.user);
-    
+
     res.json({
       message: 'Login exitoso',
       user: req.user.obtenerDatosPublicos(),

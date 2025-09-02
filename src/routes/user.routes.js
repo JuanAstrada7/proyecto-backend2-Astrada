@@ -60,7 +60,7 @@ router.get('/', verificarUsuario, verificarPermisos('admin'), async (req, res) =
 router.get('/:id', verificarUsuario, async (req, res) => {
   try {
     const user = await User.findById(req.params.id).select('-password');
-    
+
     if (!user) {
       return res.status(404).json({ error: 'Usuario no encontrado' });
     }
@@ -108,7 +108,7 @@ router.put('/:id', verificarUsuario, async (req, res) => {
 router.delete('/:id', verificarUsuario, verificarPermisos('admin'), async (req, res) => {
   try {
     const user = await User.findByIdAndDelete(req.params.id);
-    
+
     if (!user) {
       return res.status(404).json({ error: 'Usuario no encontrado' });
     }
