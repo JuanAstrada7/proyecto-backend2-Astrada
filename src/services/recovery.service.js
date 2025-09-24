@@ -1,7 +1,7 @@
-import jwt from 'jsonwebtoken';
 import UserRepository from '../repositories/user.repository.js';
 import { sendMail } from '../utils/mailer.js';
 import bcrypt from 'bcrypt';
+import { generateToken, verifyToken } from '../utils/token.js';
 
 const userRepository = new UserRepository();
 
@@ -9,7 +9,7 @@ export const sendRecoveryEmail = async (email) => {
   const user = await userRepository.getByEmail(email);
   if (!user) throw new Error('Usuario no encontrado');
 
-  const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+  const token = generateToken({ id: user._id }, '1h');
   const link = `http://localhost:3000/reset-password?token=${token}`;
 
   await sendMail(
@@ -21,7 +21,8 @@ export const sendRecoveryEmail = async (email) => {
 };
 
 export const resetPassword = async (token, newPassword) => {
-  const payload = jwt.verify(token, process.env.JWT_SECRET);
+  const payload = verifyToken(token);
+  if (!payload) throw new Error('Token inválido o expirado');
   const user = await userRepository.getById(payload.id);
   if (!user) throw new Error('Usuario no encontrado');
 

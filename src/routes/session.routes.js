@@ -1,6 +1,7 @@
 import express from 'express';
 import passport from 'passport';
 import { getCurrent } from '../controllers/session.controller.js';
+import { generateToken } from '../utils/token.js';
 
 const router = express.Router();
 
@@ -10,7 +11,7 @@ export default router;
 
 /*import express from 'express';
 import passport from 'passport';
-import { generateToken } from '../config/passport.config.js';
+import { generateToken } from '../utils/token.js';
 
 const router = express.Router();
 
