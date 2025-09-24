@@ -1,38 +1,22 @@
 import express from 'express';
-import { verificarUsuario } from '../middleware/auth.middleware.js';
-import Cart from '../models/cart.model.js';
+import * as cartController from '../controllers/cart.controller.js';
+import { verificarUsuario, verificarPermisos } from '../middlewares/auth.middleware.js';
 
 const router = express.Router();
 
-router.get('/:id', verificarUsuario, async (req, res) => {
-  try {
-    const cart = await Cart.findById(req.params.id).populate('products.product');
+// Obtener carrito por ID
+router.get('/:id', verificarUsuario, cartController.getCartById);
 
-    if (!cart) {
-      return res.status(404).json({ error: 'Carrito no encontrado' });
-    }
+// Crear carrito (solo usuario)
+router.post('/', verificarUsuario, verificarPermisos('user'), cartController.createCart);
 
-    if (req.user.role !== 'admin' && cart.user.toString() !== req.user._id.toString()) {
-      return res.status(403).json({ error: 'Acceso denegado' });
-    }
+// Actualizar carrito
+router.put('/:id', verificarUsuario, cartController.updateCart);
 
-    res.json(cart);
-  } catch (error) {
-    res.status(500).json({ error: 'Error al obtener carrito' });
-  }
-});
+// Eliminar carrito
+router.delete('/:id', verificarUsuario, cartController.deleteCart);
 
-router.post('/', verificarUsuario, async (req, res) => {
-  try {
-    const cart = new Cart({
-      user: req.user._id
-    });
-
-    await cart.save();
-    res.status(201).json(cart);
-  } catch (error) {
-    res.status(500).json({ error: 'Error al crear carrito' });
-  }
-});
+// Comprar carrito
+router.post('/:id/purchase', verificarUsuario, verificarPermisos('user'), cartController.buyCart);
 
 export default router;

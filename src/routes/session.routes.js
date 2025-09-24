@@ -1,5 +1,15 @@
 import express from 'express';
 import passport from 'passport';
+import { getCurrent } from '../controllers/session.controller.js';
+
+const router = express.Router();
+
+router.get('/current', passport.authenticate('jwt', { session: false }), getCurrent);
+
+export default router;
+
+/*import express from 'express';
+import passport from 'passport';
 import { generateToken } from '../config/passport.config.js';
 
 const router = express.Router();
@@ -36,4 +46,4 @@ router.post('/logout', (req, res) => {
   res.json({ message: 'Logout exitoso' });
 });
 
-export default router;
+export default router; */
