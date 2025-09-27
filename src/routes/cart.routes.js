@@ -12,6 +12,6 @@ router.put('/:id', verificarUsuario, cartController.updateCart);
 
 router.delete('/:id', verificarUsuario,  cartController.deleteCart);
 
-router.post('/:id/purchase', verificarUsuario, verificarPermisos('user'), cartController.buyCart);
+router.post('/:id/purchase', verificarUsuario, verificarPermisos('user', 'admin'), cartController.buyCart);
 
 export default router;
