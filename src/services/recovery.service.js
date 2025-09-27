@@ -6,7 +6,10 @@ import { generateToken, verifyToken } from '../utils/token.js';
 const userRepository = new UserRepository();
 
 export const sendRecoveryEmail = async (email) => {
-  const user = await userRepository.getByEmail(email);
+  const formattedEmail = email.trim().toLowerCase(); // Formatear el correo
+  console.log('Buscando usuario con email:', formattedEmail); // Log para depuración
+
+  const user = await userRepository.getByEmail(formattedEmail);
   if (!user) throw new Error('Usuario no encontrado');
 
   const token = generateToken({ id: user._id }, '1h');

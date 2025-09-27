@@ -5,7 +5,10 @@ export default class UserDAO {
     return User.findById(id);
   }
   async findByEmail(email) {
-    return User.findOne({ email });
+    console.log('Buscando usuario con email:', email);
+    const user = await User.findOne({ email });
+    console.log('Resultado de la búsqueda:', user);
+    return user;
   }
   async create(userData) {
     return User.create(userData);
