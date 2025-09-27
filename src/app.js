@@ -2,7 +2,6 @@ import express from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
 import passport from 'passport';
-import dotenv from 'dotenv';
 import { initializePassport } from './config/passport.config.js';
 import userRoutes from './routes/user.routes.js';
 import sessionRoutes from './routes/session.routes.js';
@@ -10,10 +9,13 @@ import cartRoutes from './routes/cart.routes.js';
 import ticketRoutes from './routes/ticket.routes.js';
 import recoveryRoutes from './routes/recovery.routes.js';
 import productRoutes from './routes/product.routes.js';
+import messagingRoutes from './routes/messaging.routes.js';
 
-dotenv.config();
-console.log('EMAIL_USER:', process.env.EMAIL_USER);
-console.log('EMAIL_PASS:', process.env.EMAIL_PASS);
+// Importar la configuración centralizada
+import config from './config/config.js';
+
+// Depuración adicional para verificar las variables de entorno
+console.log('Variables de entorno cargadas:', config);
 
 const app = express();
 const PORT = process.env.PORT || 8080;
@@ -35,7 +37,8 @@ app.use('/api/carts', cartRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/tickets', ticketRoutes);
 app.use('/api/recovery', recoveryRoutes);
-
+// Registrar la ruta para mensajes
+app.use('/api/messaging', messagingRoutes);
 
 app.get('/', (req, res) => {
   res.json({ message: 'API de Ecommerce funcionando correctamente' });

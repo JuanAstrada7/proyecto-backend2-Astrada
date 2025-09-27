@@ -36,6 +36,12 @@ const userSchema = new mongoose.Schema({
     type: String,
     default: 'user',
     enum: ['user', 'admin', 'premium']
+  },
+  phone: {
+    type: String,
+    required: true,
+    unique: true,
+    trim: true
   }
 }, {
   timestamps: true

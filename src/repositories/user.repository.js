@@ -22,4 +22,7 @@ export default class UserRepository {
     getAll() {
         return this.dao.findAll();
     }
+    getByPhone(phone) {
+        return this.dao.findOne({ phone });
+    }
 }

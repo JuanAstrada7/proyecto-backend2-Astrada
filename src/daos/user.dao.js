@@ -19,4 +19,7 @@ export default class UserDAO {
   async findAll() {
     return User.find().select('-password');
   }
+  async findOne(query) {
+    return User.findOne(query);
+  }
 }
