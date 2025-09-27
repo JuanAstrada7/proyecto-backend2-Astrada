@@ -6,11 +6,11 @@ const router = express.Router();
 
 router.get('/:id', verificarUsuario, cartController.getCartById);
 
-router.post('/', verificarUsuario, verificarPermisos('user'), cartController.createCart);
+router.post('/', verificarUsuario, verificarPermisos('user', 'admin'), cartController.createCart);
 
 router.put('/:id', verificarUsuario, cartController.updateCart);
 
-router.delete('/:id', verificarUsuario, cartController.deleteCart);
+router.delete('/:id', verificarUsuario,  cartController.deleteCart);
 
 router.post('/:id/purchase', verificarUsuario, verificarPermisos('user'), cartController.buyCart);
 
