@@ -1,4 +1,5 @@
 import * as ticketService from '../services/ticket.service.js';
+import Ticket from '../models/ticket.model.js';
 
 export const getTicketById = async (req, res) => {
     try {
@@ -11,12 +12,28 @@ export const getTicketById = async (req, res) => {
 };
 
 export const createTicket = async (req, res) => {
-    try {
-        const ticket = await ticketService.createTicket(req.body);
-        res.status(201).json(ticket);
-    } catch (error) {
-        res.status(500).json({ error: 'Error al crear ticket' });
+  try {
+
+    const { amount, purchaser, products } = req.body;
+    if (!amount || !purchaser || !products || products.length === 0) {
+      return res.status(400).json({ error: 'Faltan campos obligatorios' });
     }
+
+    const code = `TICKET-${Date.now()}`;
+
+    const existingTicket = await Ticket.findOne({ code });
+    if (existingTicket) {
+      return res.status(400).json({ error: 'El código del ticket ya existe' });
+    }
+
+    const ticket = new Ticket({ code, amount, purchaser, products });
+    await ticket.save();
+
+    res.status(201).json({ message: 'Ticket creado exitosamente', ticket });
+  } catch (error) {
+    console.error('Error al crear el ticket:', error);
+    res.status(500).json({ error: 'Error al crear ticket' });
+  }
 };
 
 export const getAllTickets = async (req, res) => {
