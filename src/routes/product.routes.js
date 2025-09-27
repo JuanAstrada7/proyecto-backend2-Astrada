@@ -1,6 +1,7 @@
 import express from 'express';
 import * as productController from '../controllers/product.controller.js';
-import { verificarUsuario, verificarPermisos } from '../middleware/auth.middleware.js';
+import { verificarUsuario } from '../middleware/auth.middleware.js';
+import { verificarPermisos } from '../middleware/authorization.middleware.js';
 import { body } from 'express-validator';
 
 const router = express.Router();
