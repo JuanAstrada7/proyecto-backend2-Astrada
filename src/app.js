@@ -12,6 +12,8 @@ import recoveryRoutes from './routes/recovery.routes.js';
 import productRoutes from './routes/product.routes.js';
 
 dotenv.config();
+console.log('EMAIL_USER:', process.env.EMAIL_USER);
+console.log('EMAIL_PASS:', process.env.EMAIL_PASS);
 
 const app = express();
 const PORT = process.env.PORT || 8080;
