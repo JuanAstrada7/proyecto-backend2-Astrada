@@ -13,8 +13,6 @@ import messagingRoutes from './routes/messaging.routes.js';
 import errorHandler from './middleware/error.middleware.js';
 import config from './config/config.js';
 
-console.log('Variables de entorno cargadas:', config);
-
 const app = express();
 const PORT = process.env.PORT || 8080;
 

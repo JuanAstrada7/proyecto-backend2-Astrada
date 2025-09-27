@@ -27,17 +27,14 @@ export const performPasswordReset = async (req, res) => {
 export const recoveryRequest = async (req, res) => {
     try {
         const { phone } = req.body;
-        console.log('Número de teléfono recibido:', phone);
 
         const user = await userRepository.getByPhone(phone);
-        console.log('Resultado de búsqueda de usuario:', user);
 
         if (!user) {
             return res.status(404).json({ error: 'Usuario no encontrado' });
         }
 
         const code = Math.floor(100000 + Math.random() * 900000);
-        console.log('Código de recuperación generado:', code);
 
         await messagingService.sendSMS({ to: phone, body: `Tu código de recuperación es: ${code}` });
         res.json({ message: 'SMS enviado correctamente', code });
