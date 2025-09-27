@@ -1,5 +1,5 @@
 import UserRepository from '../repositories/user.repository.js';
-import { sendMail } from '../utils/mailer.js';
+import { mailerService } from '../utils/mailer.js';
 import bcrypt from 'bcrypt';
 import { generateToken, verifyToken } from '../utils/token.js';
 
@@ -15,12 +15,12 @@ export const sendRecoveryEmail = async (email) => {
   const token = generateToken({ id: user._id }, '1h');
   const link = `${process.env.BASE_URL}/reset-password?token=${token}`;
 
-  await sendMail(
-    user.email,
-    'Recuperación de contraseña',
-    `<p>Haz click en el siguiente enlace para restablecer tu contraseña (expira en 1 hora):</p>
-     <a href="${link}">Restablecer contraseña</a>`
-  );
+  await mailerService.send({
+    to: user.email,
+    subject: 'Recuperación de contraseña',
+    template: 'welcome',
+    context: { link },
+  });
 };
 
 export const resetPassword = async (token, newPassword) => {
