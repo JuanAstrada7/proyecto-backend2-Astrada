@@ -7,14 +7,6 @@ const router = express.Router();
 
 router.get('/current', passport.authenticate('jwt', { session: false }), getCurrent);
 
-export default router;
-
-/*import express from 'express';
-import passport from 'passport';
-import { generateToken } from '../utils/token.js';
-
-const router = express.Router();
-
 router.post('/login', passport.authenticate('login', { session: false }), (req, res) => {
   try {
     console.log('Usuario logueado:', req.user.email);
@@ -47,4 +39,4 @@ router.post('/logout', (req, res) => {
   res.json({ message: 'Logout exitoso' });
 });
 
-export default router; */
+export default router;
