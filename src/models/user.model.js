@@ -55,7 +55,17 @@ userSchema.methods.verificarContraseña = function (contraseña) {
 userSchema.methods.obtenerDatosPublicos = function () {
   const datosUsuario = this.toObject();
   delete datosUsuario.password;
-  return datosUsuario;
+  return {
+    id: this._id,
+    first_name: this.first_name,
+    last_name: this.last_name,
+    email: this.email,
+    age: this.age,
+    cart: this.cart,
+    role: this.role,
+    createdAt: this.createdAt,
+    updatedAt: this.updatedAt
+  };
 };
 
 const User = mongoose.model('User', userSchema);

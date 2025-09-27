@@ -5,6 +5,7 @@ import User from '../models/user.model.js';
 import { generateToken } from '../utils/token.js';
 
 export const initializePassport = () => {
+    // Estrategia local para login
     passport.use('login', new LocalStrategy({
         usernameField: 'email',
         passwordField: 'password'
@@ -26,6 +27,7 @@ export const initializePassport = () => {
         }
     }));
 
+    // Estrategia JWT para autenticación
     passport.use('jwt', new JwtStrategy({
         jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
         secretOrKey: process.env.JWT_SECRET || 'jwt_secret'
@@ -35,7 +37,7 @@ export const initializePassport = () => {
             if (!user) {
                 return done(null, false);
             }
-            return done(null, user);
+            return done(null, user); // req.user tendrá el usuario completo, incluyendo el rol
         } catch (error) {
             return done(error);
         }
