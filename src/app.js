@@ -10,11 +10,9 @@ import ticketRoutes from './routes/ticket.routes.js';
 import recoveryRoutes from './routes/recovery.routes.js';
 import productRoutes from './routes/product.routes.js';
 import messagingRoutes from './routes/messaging.routes.js';
-
-// Importar la configuración centralizada
+import errorHandler from './middleware/error.middleware.js';
 import config from './config/config.js';
 
-// Depuración adicional para verificar las variables de entorno
 console.log('Variables de entorno cargadas:', config);
 
 const app = express();
@@ -37,12 +35,13 @@ app.use('/api/carts', cartRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/tickets', ticketRoutes);
 app.use('/api/recovery', recoveryRoutes);
-// Registrar la ruta para mensajes
 app.use('/api/messaging', messagingRoutes);
 
 app.get('/', (req, res) => {
   res.json({ message: 'API de Ecommerce funcionando correctamente' });
 });
+
+app.use(errorHandler);
 
 app.listen(PORT, () => {
   console.log(`Servidor corriendo en puerto ${PORT}`);

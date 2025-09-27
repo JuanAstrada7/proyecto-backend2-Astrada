@@ -10,7 +10,7 @@ export const sendRecoveryEmail = async (email) => {
   if (!user) throw new Error('Usuario no encontrado');
 
   const token = generateToken({ id: user._id }, '1h');
-  const link = `http://localhost:3000/reset-password?token=${token}`;
+  const link = `http://localhost:${process.env.PORT}/reset-password?token=${token}`;
 
   await sendMail(
     user.email,

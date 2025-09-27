@@ -10,7 +10,7 @@ router.get('/current', passport.authenticate('jwt', { session: false }), getCurr
 router.post('/login', passport.authenticate('login', { session: false }), (req, res) => {
   try {
     console.log('Usuario logueado:', req.user.email);
-  const token = generateToken(req.user.obtenerDatosPublicos());
+    const token = generateToken(req.user.obtenerDatosPublicos());
 
     res.json({
       message: 'Login exitoso',
