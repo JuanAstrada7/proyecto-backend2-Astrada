@@ -10,6 +10,7 @@ import ticketRoutes from './routes/ticket.routes.js';
 import recoveryRoutes from './routes/recovery.routes.js';
 import productRoutes from './routes/product.routes.js';
 import messagingRoutes from './routes/messaging.routes.js';
+import emailPreviewRoutes from './routes/email-preview.routes.js';
 import errorHandler from './middleware/error.middleware.js';
 import logger from './middleware/logger.middleware.js';
 import config from './config/config.js';
@@ -36,6 +37,7 @@ app.use('/api/products', productRoutes);
 app.use('/api/tickets', ticketRoutes);
 app.use('/api/recovery', recoveryRoutes);
 app.use('/api/messaging', messagingRoutes);
+app.use('/api/email-preview', emailPreviewRoutes);
 
 app.get('/', (req, res) => {
   res.json({
@@ -49,7 +51,8 @@ app.get('/', (req, res) => {
       carts: '/api/carts',
       tickets: '/api/tickets',
       recovery: '/api/recovery',
-      messaging: '/api/messaging'
+      messaging: '/api/messaging',
+      'email-preview': '/api/email-preview'
     },
     status: 'OK'
   });
@@ -57,7 +60,6 @@ app.get('/', (req, res) => {
 
 app.use(errorHandler);
 
-// Manejo de errores globales
 process.on('unhandledRejection', (reason) => {
   console.error('[process] Unhandled Rejection:', reason);
 });

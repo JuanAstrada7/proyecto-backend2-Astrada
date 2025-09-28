@@ -18,8 +18,11 @@ export const sendRecoveryEmail = async (email) => {
   await mailerService.send({
     to: user.email,
     subject: 'Recuperación de contraseña',
-    template: 'welcome',
-    context: { link },
+    template: 'password-reset',
+    context: {
+      name: user.first_name || 'Usuario',
+      link
+    },
   });
 };
 

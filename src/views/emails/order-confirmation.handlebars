@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Confirmación de pedido</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background-color: #28a745;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .content {
+            padding: 20px;
+        }
+
+        .footer {
+            background-color: #f4f4f4;
+            padding: 10px;
+            text-align: center;
+            font-size: 12px;
+        }
+
+        .order-details {
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+
+        .product-item {
+            border-bottom: 1px solid #dee2e6;
+            padding: 10px 0;
+        }
+
+        .product-item:last-child {
+            border-bottom: none;
+        }
+
+        .total {
+            font-weight: bold;
+            font-size: 18px;
+            color: #28a745;
+            text-align: right;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎉 ¡Pedido confirmado!</h1>
+        </div>
+        <div class="content">
+            <p>Hola <strong>{{purchaser}}</strong>,</p>
+            <p>Tu pedido ha sido procesado exitosamente. Aquí están los detalles:</p>
+
+            <div class="order-details">
+                <h3>📋 Detalles del pedido</h3>
+                <p><strong>Código del ticket:</strong> {{code}}</p>
+                <p><strong>Fecha:</strong> {{date}}</p>
+
+                <h4>🛒 Productos comprados:</h4>
+                {{#each products}}
+                <div class="product-item">
+                    <strong>{{this.name}}</strong><br>
+                    Cantidad: {{this.quantity}} | Precio unitario: ${{this.price}}<br>
+                    Subtotal: ${{this.subtotal}}
+                </div>
+                {{/each}}
+
+                <div class="total">
+                    Total: ${{amount}}
+                </div>
+            </div>
+
+            {{#if notPurchased}}
+            <div
+                style="background-color: #fff3cd; border: 1px solid #ffeaa7; padding: 10px; border-radius: 5px; margin: 15px 0;">
+                <strong>⚠️ Productos no disponibles:</strong>
+                <ul>
+                    {{#each notPurchased}}
+                    <li>{{this.name}} (Cantidad solicitada: {{this.quantity}})</li>
+                    {{/each}}
+                </ul>
+                <p>Estos productos no pudieron ser procesados por falta de stock.</p>
+            </div>
+            {{/if}}
+
+            <p>Gracias por tu compra. Te notificaremos cuando tu pedido esté listo para envío.</p>
+        </div>
+        <div class="footer">
+            <p>&copy; 2025 Ecommerce API - Todos los derechos reservados</p>
+            <p>Para consultas sobre tu pedido, contacta con nuestro soporte.</p>
+        </div>
+    </div>
+</body>
+
+</html>
