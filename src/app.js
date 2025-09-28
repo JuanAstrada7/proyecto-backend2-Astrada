@@ -38,13 +38,13 @@ app.use('/api/recovery', recoveryRoutes);
 app.use('/api/messaging', messagingRoutes);
 
 app.get('/', (req, res) => {
-  res.json({ 
+  res.json({
     message: 'API de Ecommerce funcionando correctamente',
     version: '1.0.0',
     timestamp: new Date().toISOString(),
     endpoints: {
       users: '/api/users',
-      sessions: '/api/sessions', 
+      sessions: '/api/sessions',
       products: '/api/products',
       carts: '/api/carts',
       tickets: '/api/tickets',
@@ -59,16 +59,16 @@ app.use(errorHandler);
 
 // Manejo de errores globales
 process.on('unhandledRejection', (reason) => {
-    console.error('[process] Unhandled Rejection:', reason);
+  console.error('[process] Unhandled Rejection:', reason);
 });
 
 process.on('uncaughtException', (err) => {
-    console.error('[process] Uncaught Exception:', err);
+  console.error('[process] Uncaught Exception:', err);
 });
 
 process.on('SIGINT', () => {
-    console.log('\n[process] SIGINT recibido. Cerrando...');
-    process.exit(0);
+  console.log('\n[process] SIGINT recibido. Cerrando...');
+  process.exit(0);
 });
 
 app.listen(PORT, () => {

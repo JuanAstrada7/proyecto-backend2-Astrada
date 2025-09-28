@@ -88,7 +88,7 @@ export const registerUser = async (req, res) => {
 export const changePassword = async (req, res) => {
   try {
     const { email, newPassword, currentPassword } = req.body;
-    
+
     if (!email || !newPassword) {
       return res.status(400).json({ error: 'Email y nueva contraseña son requeridos' });
     }
@@ -98,14 +98,12 @@ export const changePassword = async (req, res) => {
       return res.status(404).json({ error: 'Usuario no encontrado' });
     }
 
-    // Si se proporciona contraseña actual, verificarla (para usuarios logueados)
     if (currentPassword) {
       if (!user.verificarContraseña(currentPassword)) {
         return res.status(401).json({ error: 'Contraseña actual incorrecta' });
       }
     }
 
-    // Actualizar contraseña usando el servicio
     await userService.updatePassword(user._id, newPassword);
 
     res.json({
@@ -118,11 +116,10 @@ export const changePassword = async (req, res) => {
   }
 };
 
-// Controlador para reset de contraseña (sin verificar contraseña actual - solo para admins)
 export const resetUserPassword = async (req, res) => {
   try {
     const { email, newPassword } = req.body;
-    
+
     if (!email || !newPassword) {
       return res.status(400).json({ error: 'Email y nueva contraseña son requeridos' });
     }
@@ -132,7 +129,6 @@ export const resetUserPassword = async (req, res) => {
       return res.status(404).json({ error: 'Usuario no encontrado' });
     }
 
-    // Actualizar contraseña usando el servicio
     await userService.updatePassword(user._id, newPassword);
 
     res.json({

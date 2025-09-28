@@ -7,9 +7,9 @@ const {
     TWILIO_FROM_WAPP
 } = process.env;
 
-const client = (TWILIO_ACCOUNT_SID && TWILIO_AUTH_TOKEN) 
-                ? twilio(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
-                : null;
+const client = (TWILIO_ACCOUNT_SID && TWILIO_AUTH_TOKEN)
+    ? twilio(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
+    : null;
 
 export class MessagingService {
 
