@@ -2,8 +2,20 @@ import dotenv from 'dotenv';
 
 dotenv.config({ path: './.env' });
 
-if (!process.env.TWILIO_SID || !process.env.TWILIO_AUTH_TOKEN) {
-    console.error('Error: Las variables de entorno de Twilio no están definidas. Verifica el archivo .env.');
+const requiredEnvVars = [
+    'PORT',
+    'MONGO_URL',
+    'JWT_SECRET',
+    'SESSION_SECRET',
+    'EMAIL_USER',
+    'EMAIL_PASS',
+    'TWILIO_SID',
+    'TWILIO_AUTH_TOKEN'
+];
+
+const missingVars = requiredEnvVars.filter((key) => !process.env[key]);
+if (missingVars.length > 0) {
+    console.error(`Error: Faltan las siguientes variables de entorno: ${missingVars.join(', ')}`);
     process.exit(1);
 }
 
