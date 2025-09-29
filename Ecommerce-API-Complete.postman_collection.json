@@ -1,0 +1,844 @@
+{
+	"info": {
+		"_postman_id": "ecommerce-api-complete-2025",
+		"name": "Ecommerce API Complete",
+		"description": "Colección completa para API de ecommerce con autenticación JWT, CRUD de productos, carritos, tickets, recovery y messaging",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:8080",
+			"type": "string"
+		},
+		{
+			"key": "token",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "userId",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "productId",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "cartId",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "ticketId",
+			"value": "",
+			"type": "string"
+		}
+	],
+	"item": [
+		{
+			"name": "🏠 Bienvenida",
+			"item": [
+				{
+					"name": "API Info",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/",
+							"host": ["{{baseUrl}}"],
+							"path": [""]
+						},
+						"description": "Información básica de la API"
+					}
+				}
+			]
+		},
+		{
+			"name": "🔐 Autenticación",
+			"item": [
+				{
+					"name": "Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    const response = pm.response.json();",
+									"    if (response.token) {",
+									"        pm.collectionVariables.set('token', response.token);",
+									"        console.log('Token guardado:', response.token);",
+									"    }",
+									"    if (response.user && response.user.id) {",
+									"        pm.collectionVariables.set('userId', response.user.id);",
+									"        console.log('User ID guardado:', response.user.id);",
+									"    }",
+									"}"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"admin@example.com\",\n  \"password\": \"admin123\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/sessions/login",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "sessions", "login"]
+						},
+						"description": "Login de usuario - guarda automáticamente el token"
+					}
+				},
+				{
+					"name": "Current Session",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/sessions/current",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "sessions", "current"]
+						},
+						"description": "Obtener información de la sesión actual"
+					}
+				},
+				{
+					"name": "Logout",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/sessions/logout",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "sessions", "logout"]
+						},
+						"description": "Cerrar sesión del usuario"
+					}
+				}
+			]
+		},
+		{
+			"name": "👥 Usuarios",
+			"item": [
+				{
+					"name": "Registrar Usuario",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 201) {",
+									"    const response = pm.response.json();",
+									"    if (response.user && response.user.id) {",
+									"        pm.collectionVariables.set('userId', response.user.id);",
+									"        console.log('Nuevo User ID guardado:', response.user.id);",
+									"    }",
+									"}"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"first_name\": \"Juan\",\n  \"last_name\": \"Pérez\",\n  \"email\": \"juan.perez@example.com\",\n  \"age\": 28,\n  \"password\": \"password123\",\n  \"phone\": \"+54911234567\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/users/register",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "users", "register"]
+						},
+						"description": "Registrar nuevo usuario"
+					}
+				},
+				{
+					"name": "Listar Usuarios (Admin)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/users",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "users"]
+						},
+						"description": "Listar todos los usuarios (solo admin)"
+					}
+				},
+				{
+					"name": "Obtener Usuario por ID",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/users/{{userId}}",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "users", "{{userId}}"]
+						},
+						"description": "Obtener información de un usuario específico"
+					}
+				},
+				{
+					"name": "Actualizar Usuario",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"first_name\": \"Juan Carlos\",\n  \"age\": 29,\n  \"phone\": \"+54911234568\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/users/{{userId}}",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "users", "{{userId}}"]
+						},
+						"description": "Actualizar información del usuario"
+					}
+				},
+				{
+					"name": "Eliminar Usuario (Admin)",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/users/{{userId}}",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "users", "{{userId}}"]
+						},
+						"description": "Eliminar usuario (solo admin)"
+					}
+				},
+				{
+					"name": "Cambiar Contraseña",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"juan.perez@example.com\",\n  \"currentPassword\": \"password123\",\n  \"newPassword\": \"newPassword456\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/users/change-password",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "users", "change-password"]
+						},
+						"description": "Cambiar contraseña del usuario actual"
+					}
+				},
+				{
+					"name": "Reset Contraseña (Admin)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"juan.perez@example.com\",\n  \"newPassword\": \"resetPassword123\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/users/reset-password",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "users", "reset-password"]
+						},
+						"description": "Reset de contraseña por admin"
+					}
+				}
+			]
+		},
+		{
+			"name": "📦 Productos",
+			"item": [
+				{
+					"name": "Listar Productos",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/products?limit=10&page=1",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "products"],
+							"query": [
+								{
+									"key": "limit",
+									"value": "10"
+								},
+								{
+									"key": "page",
+									"value": "1"
+								}
+							]
+						},
+						"description": "Listar productos con paginación"
+					}
+				},
+				{
+					"name": "Crear Producto (Admin)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 201) {",
+									"    const response = pm.response.json();",
+									"    if (response.product && response.product.id) {",
+									"        pm.collectionVariables.set('productId', response.product.id);",
+									"        console.log('Product ID guardado:', response.product.id);",
+									"    }",
+									"}"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Smartphone Samsung Galaxy\",\n  \"price\": 299999.99,\n  \"stock\": 15,\n  \"description\": \"Smartphone Android de última generación\",\n  \"category\": \"electrónicos\",\n  \"code\": \"SAMS-GAL-001\",\n  \"thumbnails\": [\"https://example.com/image1.jpg\"]\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/products",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "products"]
+						},
+						"description": "Crear nuevo producto (solo admin)"
+					}
+				},
+				{
+					"name": "Obtener Producto por ID",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/products/{{productId}}",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "products", "{{productId}}"]
+						},
+						"description": "Obtener detalles de un producto específico"
+					}
+				},
+				{
+					"name": "Actualizar Producto (Admin)",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Smartphone Samsung Galaxy Pro\",\n  \"price\": 349999.99,\n  \"stock\": 12,\n  \"description\": \"Smartphone Android Pro de última generación con cámara mejorada\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/products/{{productId}}",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "products", "{{productId}}"]
+						},
+						"description": "Actualizar producto existente (solo admin)"
+					}
+				},
+				{
+					"name": "Eliminar Producto (Admin)",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/products/{{productId}}",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "products", "{{productId}}"]
+						},
+						"description": "Eliminar producto (solo admin)"
+					}
+				}
+			]
+		},
+		{
+			"name": "🛒 Carritos",
+			"item": [
+				{
+					"name": "Crear Carrito",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 201) {",
+									"    const response = pm.response.json();",
+									"    if (response.cart && response.cart.id) {",
+									"        pm.collectionVariables.set('cartId', response.cart.id);",
+									"        console.log('Cart ID guardado:', response.cart.id);",
+									"    }",
+									"}"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"products\": [\n    {\n      \"product\": \"{{productId}}\",\n      \"quantity\": 2\n    }\n  ]\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/carts",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "carts"]
+						},
+						"description": "Crear nuevo carrito"
+					}
+				},
+				{
+					"name": "Obtener Carrito por ID",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/carts/{{cartId}}",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "carts", "{{cartId}}"]
+						},
+						"description": "Obtener carrito por ID con productos populados"
+					}
+				},
+				{
+					"name": "Actualizar Carrito",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"products\": [\n    {\n      \"product\": \"{{productId}}\",\n      \"quantity\": 3\n    }\n  ]\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/carts/{{cartId}}",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "carts", "{{cartId}}"]
+						},
+						"description": "Actualizar productos en el carrito"
+					}
+				},
+				{
+					"name": "Eliminar Carrito",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/carts/{{cartId}}",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "carts", "{{cartId}}"]
+						},
+						"description": "Eliminar carrito completo"
+					}
+				},
+				{
+					"name": "Comprar Carrito",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    const response = pm.response.json();",
+									"    if (response.ticket && response.ticket.id) {",
+									"        pm.collectionVariables.set('ticketId', response.ticket.id);",
+									"        console.log('Ticket ID guardado:', response.ticket.id);",
+									"    }",
+									"}"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"paymentMethod\": \"credit_card\",\n  \"shippingAddress\": \"Av. Corrientes 1234, CABA, Argentina\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/carts/{{cartId}}/purchase",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "carts", "{{cartId}}", "purchase"]
+						},
+						"description": "Finalizar compra del carrito"
+					}
+				}
+			]
+		},
+		{
+			"name": "🎫 Tickets",
+			"item": [
+				{
+					"name": "Listar Tickets",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/tickets",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "tickets"]
+						},
+						"description": "Listar tickets del usuario actual"
+					}
+				},
+				{
+					"name": "Crear Ticket Manual",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"amount\": 599999.98,\n  \"purchaser\": \"{{userId}}\",\n  \"products\": [\n    {\n      \"product\": \"{{productId}}\",\n      \"quantity\": 2,\n      \"price\": 299999.99\n    }\n  ]\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/tickets",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "tickets"]
+						},
+						"description": "Crear ticket manualmente"
+					}
+				},
+				{
+					"name": "Obtener Ticket por ID",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/tickets/{{ticketId}}",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "tickets", "{{ticketId}}"]
+						},
+						"description": "Obtener detalles de un ticket específico"
+					}
+				}
+			]
+		},
+		{
+			"name": "🔑 Recovery",
+			"item": [
+				{
+					"name": "Solicitar Recuperación (SMS)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"phone\": \"+54911234567\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/recovery/request",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "recovery", "request"]
+						},
+						"description": "Solicitar código de recuperación por SMS"
+					}
+				},
+				{
+					"name": "Reset con Token",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"token\": \"RECOVERY_TOKEN_HERE\",\n  \"newPassword\": \"newSecurePassword123\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/recovery/reset",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "recovery", "reset"]
+						},
+						"description": "Reset de contraseña con token de recuperación"
+					}
+				}
+			]
+		},
+		{
+			"name": "📱 Messaging",
+			"item": [
+				{
+					"name": "Enviar SMS",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"to\": \"+54911234567\",\n  \"body\": \"¡Hola! Tu pedido ha sido confirmado. Código de seguimiento: #ECM2025001\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/messaging/sms",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "messaging", "sms"]
+						},
+						"description": "Enviar SMS usando Twilio"
+					}
+				},
+				{
+					"name": "Enviar WhatsApp",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"to\": \"whatsapp:+54911234567\",\n  \"body\": \"🛒 ¡Tu compra fue exitosa!\\n\\nTotal: $599.999,98\\nTicket: {{ticketId}}\\n\\n¡Gracias por tu compra! 🎉\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/messaging/whatsapp",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "messaging", "whatsapp"]
+						},
+						"description": "Enviar mensaje de WhatsApp usando Twilio"
+					}
+				}
+			]
+		},
+		{
+			"name": "📧 Email Preview",
+			"item": [
+				{
+					"name": "Lista de Plantillas",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/email-preview/preview",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "email-preview", "preview"]
+						},
+						"description": "Lista de todas las plantillas de email disponibles"
+					}
+				},
+				{
+					"name": "Preview Bienvenida",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/email-preview/preview/welcome",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "email-preview", "preview", "welcome"]
+						},
+						"description": "Vista previa del email de bienvenida"
+					}
+				},
+				{
+					"name": "Preview Password Reset",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/email-preview/preview/password-reset",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "email-preview", "preview", "password-reset"]
+						},
+						"description": "Vista previa del email de reset de contraseña"
+					}
+				},
+				{
+					"name": "Preview Order Confirmation",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/email-preview/preview/order-confirmation",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "email-preview", "preview", "order-confirmation"]
+						},
+						"description": "Vista previa del email de confirmación de pedido"
+					}
+				},
+				{
+					"name": "Preview User Registered",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/email-preview/preview/user-registered",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "email-preview", "preview", "user-registered"]
+						},
+						"description": "Vista previa del email de usuario registrado (para admins)"
+					}
+				}
+			]
+		}
+	]
+}
