@@ -10,6 +10,7 @@ import ticketRoutes from './routes/ticket.routes.js';
 import recoveryRoutes from './routes/recovery.routes.js';
 import productRoutes from './routes/product.routes.js';
 import messagingRoutes from './routes/messaging.routes.js';
+import mockRoutes from './routes/mock.routes.js';
 import emailPreviewRoutes from './routes/email-preview.routes.js';
 import errorHandler from './middleware/error.middleware.js';
 import logger from './middleware/logger.middleware.js';
@@ -37,6 +38,7 @@ app.use('/api/products', productRoutes);
 app.use('/api/tickets', ticketRoutes);
 app.use('/api/recovery', recoveryRoutes);
 app.use('/api/messaging', messagingRoutes);
+app.use('/api/mocks', mockRoutes);
 app.use('/api/email-preview', emailPreviewRoutes);
 
 app.get('/', (req, res) => {
@@ -52,6 +54,7 @@ app.get('/', (req, res) => {
       tickets: '/api/tickets',
       recovery: '/api/recovery',
       messaging: '/api/messaging',
+      mocks: '/api/mocks',
       'email-preview': '/api/email-preview'
     },
     status: 'OK'

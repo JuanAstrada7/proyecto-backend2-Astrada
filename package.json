@@ -9,6 +9,7 @@
     "dev": "nodemon src/app.js"
   },
   "dependencies": {
+    "@faker-js/faker": "^10.1.0",
     "bcrypt": "^6.0.0",
     "connect-mongo": "^5.1.0",
     "cors": "^2.8.5",

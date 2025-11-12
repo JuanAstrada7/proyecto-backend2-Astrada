@@ -65,7 +65,7 @@ export const registerUser = async (req, res) => {
       last_name,
       email,
       age,
-      password,
+      password, // Pasamos la contraseña en texto plano, el modelo se encarga de encriptarla
       phone,
       cart: cart._id
     });
