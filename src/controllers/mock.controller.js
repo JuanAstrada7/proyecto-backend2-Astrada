@@ -1,5 +1,4 @@
 import { generateUser, generateProduct } from '../utils/mock.utils.js';
-
 import * as userService from '../services/user.service.js';
 import * as productService from '../services/product.service.js';
 
@@ -22,10 +21,10 @@ export const getMockingProducts = (req, res) => {
 export const generateAndInsertData = async (req, res) => {
   try {
     const { users: numUsers = 10, products: numProducts = 20 } = req.query;
-    
+
     const usersLength = Math.max(0, parseInt(numUsers, 10) || 0);
     const productsLength = Math.max(0, parseInt(numProducts, 10) || 0);
-    
+
     const usersToCreate = Array.from({ length: usersLength }, generateUser);
     const productsToCreate = Array.from({ length: productsLength }, generateProduct);
     const createdUsers = await userService.createManyUsers(usersToCreate);
