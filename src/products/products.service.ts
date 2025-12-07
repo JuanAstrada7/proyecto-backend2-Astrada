@@ -4,7 +4,7 @@ import { PaginateOptions, PaginateResult } from 'mongoose';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import {
-  Product,  
+  Product,
   type ProductDocument,
   type ProductPaginateModel,
 } from './schemas/product.schema';
@@ -29,7 +29,7 @@ export class ProductsService {
     @InjectModel(Product.name)
     private productModel: ProductPaginateModel,
     private readonly configService: ConfigService,
-  ) {}
+  ) { }
 
   async create(createProductDto: CreateProductDto): Promise<Product> {
     const createdProduct = new this.productModel(createProductDto);

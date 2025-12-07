@@ -5,13 +5,13 @@ import { TicketDocument } from '../tickets/schemas/ticket.schema';
 
 @Injectable()
 export class EmailService {
-  constructor(private readonly mailerService: MailerService) {}
+  constructor(private readonly mailerService: MailerService) { }
 
   async sendUserWelcome(user: UserDocument) {
     await this.mailerService.sendMail({
       to: user.email,
       subject: '¡Bienvenido a nuestro ecommerce!',
-      template: './user-registered', // Apunta al archivo .handlebars
+      template: './user-registered',
       context: {
         first_name: user.first_name,
         last_name: user.last_name,
@@ -19,8 +19,6 @@ export class EmailService {
         age: user.age,
         phone: user.phone,
         role: user.role,
-        // Podrías añadir un link al frontend para el login
-        // loginLink: 'http://tu-frontend.com/login'
       },
     });
   }
@@ -53,10 +51,10 @@ export class EmailService {
     await this.mailerService.sendMail({
       to: user.email,
       subject: 'Restablecimiento de tu contraseña',
-      template: './reset-password', // Nueva plantilla
+      template: './reset-password',
       context: {
         first_name: user.first_name,
-        resetLink, // El link generado en AuthService
+        resetLink,
       },
     });
   }

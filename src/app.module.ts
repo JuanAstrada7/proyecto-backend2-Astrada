@@ -13,12 +13,12 @@ import { MessagingModule } from './messaging/messaging.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
-      isGlobal: true, // Variables de entorno disponibles globalmente
+      isGlobal: true,
     }),
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({
-        uri: configService.get<string>('MONGO_URI'), // Usa tu variable de entorno
+        uri: configService.get<string>('MONGO_URI'),
       }),
       inject: [ConfigService],
     }),
@@ -32,4 +32,4 @@ import { MessagingModule } from './messaging/messaging.module';
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule { }

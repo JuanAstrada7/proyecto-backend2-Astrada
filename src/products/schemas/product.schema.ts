@@ -30,9 +30,6 @@ export class Product {
   @Prop({ default: true })
   status: boolean;
 
-  // Mongoose-autopopulate o referencias a 'owner' se pueden añadir aquí si es necesario
-  // @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User' })
-  // owner: User;
 }
 
 export const ProductSchema = SchemaFactory.createForClass(Product);

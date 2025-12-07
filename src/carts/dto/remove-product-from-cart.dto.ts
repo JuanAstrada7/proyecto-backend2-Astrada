@@ -6,6 +6,6 @@ export class RemoveProductFromCartDto {
 
   @IsInt()
   @IsPositive()
-  @IsOptional() // Si no se especifica, se elimina todo el producto
+  @IsOptional()
   readonly quantity?: number;
 }

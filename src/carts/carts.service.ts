@@ -22,7 +22,7 @@ export class CartsService {
     private readonly emailService: EmailService,
     private readonly smsService: SmsService,
     @Inject(forwardRef(() => UsersService)) private readonly usersService: UsersService,
-  ) {}
+  ) { }
 
   async create(): Promise<CartDocument> {
     const newCart = new this.cartModel({ products: [] });
@@ -32,7 +32,7 @@ export class CartsService {
   async findOne(id: string): Promise<CartDocument> {
     const cart = await this.cartModel
       .findById(id)
-      .populate('products.product') // Populamos los datos de los productos
+      .populate('products.product')
       .exec();
     if (!cart) {
       throw new NotFoundException(`Cart with ID "${id}" not found`);
@@ -46,28 +46,25 @@ export class CartsService {
   ): Promise<CartDocument> {
     const { productId, quantity } = addProductDto;
 
-    // 1. Validar que el producto exista
     await this.productsService.findOne(productId);
 
     const cart = await this.findOne(cartId);
 
-    // 2. Comprobar si el producto ya está en el carrito
     const productIndex = cart.products.findIndex(
       (item) => (item.product as any)._id.toString() === productId,
     );
 
     if (productIndex > -1) {
-      // Si ya existe, actualizamos la cantidad
+
       cart.products[productIndex].quantity += quantity;
     } else {
-      // Si no existe, lo añadimos al array
+
       cart.products.push({ product: productId as any, quantity });
     }
 
     return cart.save();
   }
 
-  // Aquí irían otros métodos como removeProduct, updateQuantity, clearCart, etc.
 
   async removeProduct(
     cartId: string,
@@ -88,10 +85,10 @@ export class CartsService {
     }
 
     if (quantity && cart.products[productIndex].quantity > quantity) {
-      // Reducir la cantidad
+
       cart.products[productIndex].quantity -= quantity;
     } else {
-      // Eliminar el producto completamente
+
       cart.products.splice(productIndex, 1);
     }
 
@@ -131,10 +128,8 @@ export class CartsService {
       throw new BadRequestException('No products could be purchased due to insufficient stock.');
     }
 
-    // 1. Crear el ticket
     const ticket = await this.ticketsService.create(totalAmount, purchaserEmail);
 
-    // 2. Actualizar el stock de los productos comprados
     const updateStockPromises = productsToPurchase.map((item) => {
       const product = item.product as ProductDocument;
       return this.productsService.update(product._id.toString(), {
@@ -143,16 +138,13 @@ export class CartsService {
     });
     await Promise.all(updateStockPromises);
 
-    // 3. Actualizar el carrito con los productos que no se pudieron comprar
-    cart.products = productsNotPurchased.map((item) => ({ product: item.product, quantity: 1 })) as any; // Asumiendo que se re-añade con cantidad 1
+    cart.products = productsNotPurchased.map((item) => ({ product: item.product, quantity: 1 })) as any;
     await cart.save();
 
-    // 4. Enviar email de confirmación
     this.emailService
       .sendOrderConfirmation(ticket, productsToPurchase, productsNotPurchased)
       .catch(console.error);
 
-    // 5. Enviar SMS de confirmación (si el usuario tiene teléfono)
     const user = await this.usersService.findByEmail(purchaserEmail);
     if (user && user.phone) {
       const message = `Gracias por tu compra! Tu pedido con código ${ticket.code} por un total de $${ticket.amount} ha sido procesado.`;

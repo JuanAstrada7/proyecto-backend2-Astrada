@@ -15,7 +15,7 @@ export class Ticket {
   amount: number;
 
   @Prop({ required: true })
-  purchaser: string; // Email del comprador
+  purchaser: string;
 }
 
 export const TicketSchema = SchemaFactory.createForClass(Ticket);

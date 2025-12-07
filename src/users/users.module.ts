@@ -9,11 +9,11 @@ import { MessagingModule } from '../messaging/messaging.module';
 @Module({
   imports: [
     MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
-    forwardRef(() => CartsModule), // Rompemos la dependencia circular
-    MessagingModule, // Importamos el módulo de mensajería
+    forwardRef(() => CartsModule),
+    MessagingModule,
   ],
   providers: [UsersService],
   controllers: [UsersController],
-  exports: [UsersService], // ¡MUY IMPORTANTE! Para que AuthModule pueda usarlo.
+  exports: [UsersService],
 })
-export class UsersModule {}
+export class UsersModule { }

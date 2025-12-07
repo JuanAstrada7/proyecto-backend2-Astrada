@@ -15,7 +15,7 @@ import { SmsService } from './sms.service';
         transport: {
           host: configService.get<string>('EMAIL_HOST'),
           port: configService.get<number>('EMAIL_PORT'),
-          secure: configService.get<string>('EMAIL_SECURE') === 'true', // Leemos desde .env
+          secure: configService.get<string>('EMAIL_SECURE') === 'true',
           auth: {
             user: configService.get<string>('EMAIL_USER'),
             pass: configService.get<string>('EMAIL_PASS'),
@@ -25,7 +25,7 @@ import { SmsService } from './sms.service';
           from: `"No Reply" <${configService.get<string>('EMAIL_FROM')}>`,
         },
         template: {
-          dir: join(__dirname, '..', '..', 'src', 'views', 'emails'), // Ruta a tus plantillas
+          dir: join(__dirname, '..', '..', 'src', 'views', 'emails'),
           adapter: new HandlebarsAdapter(),
           options: {
             strict: true,
@@ -35,6 +35,6 @@ import { SmsService } from './sms.service';
     }),
   ],
   providers: [EmailService, SmsService],
-  exports: [EmailService, SmsService], // Exportamos los servicios para usarlos en otros módulos
+  exports: [EmailService, SmsService],
 })
-export class MessagingModule {}
+export class MessagingModule { }

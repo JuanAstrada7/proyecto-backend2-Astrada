@@ -8,6 +8,6 @@ import { Ticket, TicketSchema } from './schemas/ticket.schema';
     MongooseModule.forFeature([{ name: Ticket.name, schema: TicketSchema }]),
   ],
   providers: [TicketsService],
-  exports: [TicketsService], // Exportamos para que CartsService pueda usarlo
+  exports: [TicketsService],
 })
-export class TicketsModule {}
+export class TicketsModule { }

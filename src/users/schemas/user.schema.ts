@@ -30,14 +30,11 @@ export class User {
   @Prop({ type: Types.ObjectId, ref: 'Cart' })
   cart: Types.ObjectId;
 
-  // Aquí irían otras propiedades como 'cart', 'documents', 'last_connection', etc.
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
 
-// Hook de Mongoose para hashear la contraseña ANTES de guardarla
 UserSchema.pre<UserDocument>('save', async function (next) {
-  // Solo hashear si la contraseña ha sido modificada (o es nueva)
   if (!this.isModified('password')) {
     return next();
   }
@@ -46,7 +43,6 @@ UserSchema.pre<UserDocument>('save', async function (next) {
   next();
 });
 
-// Método para no devolver la contraseña en las respuestas
 UserSchema.methods.toJSON = function () {
   const userObject = this.toObject();
   delete userObject.password;

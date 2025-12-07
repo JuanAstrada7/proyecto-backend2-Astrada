@@ -7,15 +7,14 @@ import { Ticket, TicketDocument } from './schemas/ticket.schema';
 export class TicketsService {
   constructor(
     @InjectModel(Ticket.name) private ticketModel: Model<TicketDocument>,
-  ) {}
+  ) { }
 
   async create(
     amount: number,
     purchaser: string,
   ): Promise<TicketDocument> {
     const newTicket = new this.ticketModel({
-      code: `${Date.now()}${Math.random()}`, // Código simple, se puede mejorar
-      purchase_datetime: new Date(),
+      code: `${Date.now()}${Math.random()}`,
       amount,
       purchaser,
     });

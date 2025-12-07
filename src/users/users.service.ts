@@ -16,16 +16,16 @@ export class UsersService {
   constructor(
     @InjectModel(User.name) private userModel: Model<UserDocument>,
     private readonly cartsService: CartsService,
-    private readonly emailService: EmailService, // Inyectamos el servicio de email
-  ) {}
+    private readonly emailService: EmailService,
+  ) { }
 
   async create(createUserDto: CreateUserDto): Promise<User> {
-    // 1. Crear un carrito nuevo
+
     const newCart = await this.cartsService.create();
-    // 2. Crear el usuario y asignarle el ID del carrito
+
     const userToCreate = new this.userModel({ ...createUserDto, cart: newCart._id });
     const createdUser = await userToCreate.save();
-    // 3. Enviar email de bienvenida (sin esperar a que termine)
+
     this.emailService.sendUserWelcome(createdUser).catch(console.error);
     return createdUser;
   }
@@ -42,10 +42,8 @@ export class UsersService {
     return user;
   }
 
-  // Método crucial para el login
+
   async findByEmail(email: string): Promise<UserDocument | undefined> {
-    // Usamos .select('+password') para que nos devuelva la contraseña,
-    // que por defecto estaría oculta por el hook toJSON.
     const user = await this.userModel.findOne({ email }).select('+password').exec();
     return user ?? undefined;
   }
@@ -84,18 +82,17 @@ export class UsersService {
   }
 
   async adminResetPassword(userId: string): Promise<void> {
-    const user: UserDocument = await this.findOne(userId); // Reutilizamos findOne que ya maneja el NotFound
+    const user: UserDocument = await this.findOne(userId);
 
-    const newPassword = randomBytes(8).toString('hex'); // Genera una contraseña aleatoria
+    const newPassword = randomBytes(8).toString('hex');
     user.password = newPassword;
     await user.save();
 
-    // Enviar la nueva contraseña por email (sin esperar)
     this.emailService.sendNewPassword(user, newPassword).catch(console.error);
   }
 
   async updateRole(userId: string, newRole: Role): Promise<UserDocument> {
-    const user = await this.findOne(userId); // Reutiliza findOne para asegurar que el usuario exista
+    const user = await this.findOne(userId);
     user.role = newRole;
     await user.save();
     return user;

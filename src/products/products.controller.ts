@@ -22,7 +22,7 @@ import { CreateProductDto } from './dto/create-product.dto';
 @ApiTags('Products')
 @Controller('api/products')
 export class ProductsController {
-  constructor(private readonly productsService: ProductsService) {}
+  constructor(private readonly productsService: ProductsService) { }
 
   @Post()
   @UseGuards(JwtAuthGuard, RolesGuard)
@@ -48,7 +48,6 @@ export class ProductsController {
     @Query('sort') sort?: 'asc' | 'desc',
     @Query('query') query?: string,
   ) {
-    // Parseamos los números que vienen como string desde la query
     return this.productsService.findAll(+limit, +page, sort, query);
   }
 
