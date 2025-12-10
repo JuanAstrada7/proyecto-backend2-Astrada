@@ -119,7 +119,7 @@ NODE_ENV=development
 
 npm run start:dev
 
-La aplicación estará disponible en `http://localhost:3000`
+La aplicación estará disponible en `http://localhost:3001`
 
 ## 🧪 Ejecutar Pruebas
 
@@ -143,7 +143,7 @@ npm run test:e2e
 
 Una vez que la aplicación está en ejecución, accede a la documentación interactiva de la API:
 
-### 🔗 URL: http://localhost:3000/api-docs
+### 🔗 URL: http://localhost:3001/api-docs
 
 ### Módulo Users Documentado
 
@@ -191,8 +191,8 @@ docker-compose up -d
 
 ### 3️⃣ Acceder a la aplicación
 
-- **API**: http://localhost:3000
-- **Swagger**: http://localhost:3000/api-docs
+- **API**: http://localhost:3001
+- **Swagger**: http://localhost:3001/api-docs
 
 ### Variables de Entorno Requeridas en Docker
 
