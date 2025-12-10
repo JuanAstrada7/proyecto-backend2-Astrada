@@ -1,4 +1,15 @@
 node_modules
 dist
+coverage
+.git
+.vscode
 .env
-*.log
+npm-debug.log
+.DS_Store
+
+.idea
+yarn-error.log
+.log
+.envrc
+.nyc_output
+.pem

@@ -1,0 +1,17 @@
+version: '3.8'
+services:
+  api:
+    build: .
+    image: juancho14/app-ecommerce:latest
+    container_name: ecommerce-api
+    env_file:
+      - .env
+    ports:
+      - "8080:3000"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3000/"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 5s

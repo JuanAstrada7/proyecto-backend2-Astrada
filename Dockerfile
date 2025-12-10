@@ -1,37 +1,28 @@
-# --- Stage 1: Build ---
-# Usa una imagen de Node.js para la fase de construcción
 FROM node:18-alpine AS builder
+WORKDIR /app
 
-# Establece el directorio de trabajo dentro del contenedor
-WORKDIR /usr/src/app
-
-# Copia los archivos de definición de dependencias
 COPY package*.json ./
+RUN npm ci
 
-# Instala las dependencias de producción y desarrollo
-RUN npm install
-
-# Copia el resto de los archivos de la aplicación
 COPY . .
-
-# Compila la aplicación TypeScript a JavaScript
 RUN npm run build
 
-# --- Stage 2: Production ---
-# Usa una imagen de Node.js más ligera para producción
-FROM node:18-alpine
+FROM node:18-alpine AS runner
+WORKDIR /app
+ENV NODE_ENV=production
+ENV PORT=3000
 
-WORKDIR /usr/src/app
+RUN addgroup -S appgroup && adduser -S appuser -G appgroup
 
-# Copia solo las dependencias de producción desde la etapa 'builder'
-COPY --from=builder /usr/src/app/node_modules ./node_modules
 COPY package*.json ./
+RUN npm ci --omit=dev
 
-# Copia la aplicación compilada desde la etapa 'builder'
-COPY --from=builder /usr/src/app/dist ./dist
+COPY --from=builder /app/dist ./dist
 
-# Expone el puerto en el que corre la aplicación
+USER appuser
+
 EXPOSE 3000
 
-# Comando para iniciar la aplicación en modo producción
-CMD ["node", "dist/main"]
+HEALTHCHECK --interval=30s --timeout=5s --start-period=5s --retries=3 CMD wget --no-verbose --tries=1 --spider http://localhost:${PORT}/ || exit 1
+
+CMD ["node", "dist/main.js"]
