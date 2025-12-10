@@ -19,7 +19,7 @@ describe('Tickets (e2e)', () => {
   beforeEach(async () => {
     @Controller('api/tickets')
     class TicketsTestController {
-      constructor(private readonly ticketsService: TicketsService) {}
+      constructor(private readonly ticketsService: TicketsService) { }
 
       @Post()
       @HttpCode(HttpStatus.CREATED)
@@ -29,7 +29,6 @@ describe('Tickets (e2e)', () => {
       }
       @Get(':code')
       async findByCode(@Param('code') code: string) {
-        // use the mocked service method
         if ((this.ticketsService as any).findByCode) {
           return (this.ticketsService as any).findByCode(code);
         }

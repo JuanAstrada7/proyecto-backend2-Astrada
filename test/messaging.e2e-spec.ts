@@ -18,7 +18,7 @@ describe('Messaging (e2e)', () => {
   beforeEach(async () => {
     @Controller('api/messaging')
     class MessagingTestController {
-      constructor(private readonly emailService: EmailService, private readonly smsService: SmsService) {}
+      constructor(private readonly emailService: EmailService, private readonly smsService: SmsService) { }
 
       @Post('email-preview')
       @HttpCode(HttpStatus.CREATED)

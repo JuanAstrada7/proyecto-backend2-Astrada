@@ -8,7 +8,7 @@ import { RolesGuard } from '../src/auth/guards/roles.guard';
 
 const mockCartId = '64aabbccddeeff0011223344';
 const mockProductId = '64aabbccddeeff0011223345';
-const notFoundId = '64aabbccddeeff0011223346'; 
+const notFoundId = '64aabbccddeeff0011223346';
 
 const mockCart = {
   _id: mockCartId,
