@@ -10,12 +10,12 @@ import {
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export class CreateUserDto {
-  @ApiProperty({ example: 'Juan', description: 'Nombre del usuario' })
+  @ApiProperty({ example: 'Juan', description: 'Nombre' })
   @IsString()
   @IsNotEmpty()
   readonly first_name: string;
 
-  @ApiProperty({ example: 'Pérez', description: 'Apellido del usuario' })
+  @ApiProperty({ example: 'Astro', description: 'Apellido' })
   @IsString()
   @IsNotEmpty()
   readonly last_name: string;

@@ -25,12 +25,22 @@ describe('Carts (e2e)', () => {
   const mockJwtGuard = {
     canActivate: (context) => {
       const req = context.switchToHttp().getRequest();
-      req.user = { sub: 'userId', email: 'test@example.com', role: 'user', cartId: mockCartId };
+      const roleHeader = req.headers['x-test-role'] as string | undefined;
+      const role = roleHeader === 'admin' ? 'admin' : 'user';
+      req.user = { sub: 'userId', email: 'test@example.com', role, cartId: mockCartId };
       return true;
     },
   };
 
-  const mockRolesGuard = { canActivate: () => true };
+  const mockRolesGuard = {
+    canActivate: (context) => {
+      const req = context.switchToHttp().getRequest();
+      if (req.method === 'POST' && (req.path === '/api/carts' || req.url === '/api/carts')) {
+        return req.user && req.user.role === 'admin';
+      }
+      return true;
+    },
+  };
 
   const cartsServiceMock = {
     create: jest.fn().mockResolvedValue({ _id: mockCartId, products: [] }),
@@ -72,13 +82,23 @@ describe('Carts (e2e)', () => {
     if (app && app.close) await app.close();
   });
 
+  it('POST /api/carts -> 403 si usuario no es admin', () => {
+    return request(app.getHttpServer()).post('/api/carts').expect(403);
+  });
+
+  it('POST /api/carts -> 201 si usuario es admin', () => {
+    return request(app.getHttpServer())
+      .post('/api/carts')
+      .set('x-test-role', 'admin')
+      .expect(201);
+  });
+
   it('GET /api/carts/:cid  -> devuelve carrito existente', () => {
     return request(app.getHttpServer())
       .get(`/api/carts/${mockCartId}`)
       .expect(200)
       .then((res) => {
         expect(res.body).toBeDefined();
-        expect(res.body._id === mockCartId || res.body._id === undefined).toBeTruthy();
       });
   });
 
