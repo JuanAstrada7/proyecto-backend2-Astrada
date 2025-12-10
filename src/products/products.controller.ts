@@ -28,19 +28,19 @@ export class ProductsController {
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(Role.Admin)
   @ApiBearerAuth()
-  @ApiOperation({ summary: 'Create a new product (Admin only)' })
-  @ApiResponse({ status: 201, description: 'The product has been successfully created.' })
-  @ApiResponse({ status: 403, description: 'Forbidden.' })
+  @ApiOperation({ summary: 'Crear un nuevo producto (Solo Admin)' })
+  @ApiResponse({ status: 201, description: 'El producto se ha creado correctamente.' })
+  @ApiResponse({ status: 403, description: 'Acceso denegado.' })
   create(@Body() createProductDto: CreateProductDto) {
     return this.productsService.create(createProductDto);
   }
 
   @UseGuards(JwtAuthGuard)
-  @ApiOperation({ summary: 'Get all products with pagination' })
-  @ApiQuery({ name: 'limit', required: false, type: Number, description: 'Number of items per page' })
-  @ApiQuery({ name: 'page', required: false, type: Number, description: 'Current page number' })
-  @ApiQuery({ name: 'sort', required: false, enum: ['asc', 'desc'], description: 'Sort by price' })
-  @ApiQuery({ name: 'query', required: false, type: String, description: 'JSON filter query (e.g., {"category":"Laptops"})' })
+  @ApiOperation({ summary: 'Obtener todos los productos con paginación' })
+  @ApiQuery({ name: 'limit', required: false, type: Number, description: 'Número de elementos por página' })
+  @ApiQuery({ name: 'page', required: false, type: Number, description: 'Número de página actual' })
+  @ApiQuery({ name: 'sort', required: false, enum: ['asc', 'desc'], description: 'Ordenar por precio' })
+  @ApiQuery({ name: 'query', required: false, type: String, description: 'Consulta de filtro en JSON (p. ej., {"category":"Laptops"})' })
   @Get()
   findAll(
     @Query('limit') limit: number = 10,
@@ -52,9 +52,9 @@ export class ProductsController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @ApiOperation({ summary: 'Get a single product by ID' })
-  @ApiResponse({ status: 200, description: 'Returns the product.' })
-  @ApiResponse({ status: 404, description: 'Product not found.' })
+  @ApiOperation({ summary: 'Obtener un producto por ID' })
+  @ApiResponse({ status: 200, description: 'Devuelve el producto.' })
+  @ApiResponse({ status: 404, description: 'Producto no encontrado.' })
   @Get(':id')
   findOne(@Param('id', ParseMongoIdPipe) id: string) {
     return this.productsService.findOne(id);

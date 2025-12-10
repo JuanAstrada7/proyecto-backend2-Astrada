@@ -33,29 +33,29 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Post()
-  @ApiOperation({ summary: 'Register a new user' })
+  @ApiOperation({ summary: 'Registrar un nuevo usuario' })
   @ApiResponse({
     status: 201,
-    description: 'User registered successfully',
+    description: 'Usuario registrado con éxito',
     type: User,
   })
-  @ApiResponse({ status: 400, description: 'Bad Request' })
+  @ApiResponse({ status: 400, description: 'Solicitud inválida' })
   async register(@Body() createUserDto: CreateUserDto) {
     const user = await this.usersService.create(createUserDto);
-    return { message: 'User registered successfully', user };
+    return { message: 'Usuario registrado con éxito', user };
   }
 
   @UseGuards(JwtAuthGuard)
   @Get('me')
   @ApiBearerAuth()
-  @ApiOperation({ summary: 'Get current user profile' })
+  @ApiOperation({ summary: 'Obtener perfil del usuario actual' })
   @ApiResponse({
     status: 200,
-    description: 'The found record',
+    description: 'Registro encontrado',
     type: User,
   })
-  @ApiResponse({ status: 401, description: 'Unauthorized' })
-  @ApiResponse({ status: 404, description: 'User not found' })
+  @ApiResponse({ status: 401, description: 'No autorizado' })
+  @ApiResponse({ status: 404, description: 'Usuario no encontrado' })
   getProfile(@Request() req) {
     return this.usersService.findOne(req.user.sub);
   }
@@ -64,10 +64,10 @@ export class UsersController {
   @Roles(Role.Admin)
   @Get()
   @ApiBearerAuth()
-  @ApiOperation({ summary: 'Get all users (Admin only)' })
-  @ApiResponse({ status: 200, description: 'List of users', type: [User] })
-  @ApiResponse({ status: 401, description: 'Unauthorized' })
-  @ApiResponse({ status: 403, description: 'Forbidden.' })
+  @ApiOperation({ summary: 'Obtener todos los usuarios (Solo Admin)' })
+  @ApiResponse({ status: 200, description: 'Lista de usuarios', type: [User] })
+  @ApiResponse({ status: 401, description: 'No autorizado' })
+  @ApiResponse({ status: 403, description: 'Acceso denegado.' })
   findAll() {
     return this.usersService.findAll();
   }
@@ -76,11 +76,11 @@ export class UsersController {
   @Roles(Role.Admin)
   @Get(':id')
   @ApiBearerAuth()
-  @ApiOperation({ summary: 'Get user by ID (Admin only)' })
-  @ApiResponse({ status: 200, description: 'The found record', type: User })
-  @ApiResponse({ status: 401, description: 'Unauthorized' })
-  @ApiResponse({ status: 403, description: 'Forbidden.' })
-  @ApiResponse({ status: 404, description: 'User not found' })
+  @ApiOperation({ summary: 'Obtener usuario por ID (Solo Admin)' })
+  @ApiResponse({ status: 200, description: 'Registro encontrado', type: User })
+  @ApiResponse({ status: 401, description: 'No autorizado' })
+  @ApiResponse({ status: 403, description: 'Acceso denegado.' })
+  @ApiResponse({ status: 404, description: 'Usuario no encontrado' })
   findOne(@Param('id', ParseMongoIdPipe) id: string) {
     return this.usersService.findOne(id);
   }
@@ -89,12 +89,12 @@ export class UsersController {
   @Roles(Role.Admin)
   @ApiBearerAuth()
   @Patch(':id/role')
-  @ApiOperation({ summary: 'Update a user role (Admin only)' })
-  @ApiResponse({ status: 200, description: 'User role updated successfully' })
-  @ApiResponse({ status: 400, description: 'Bad Request' })
-  @ApiResponse({ status: 401, description: 'Unauthorized' })
-  @ApiResponse({ status: 403, description: 'Forbidden' })
-  @ApiResponse({ status: 404, description: 'User not found' })
+  @ApiOperation({ summary: 'Actualizar rol de usuario (Solo Admin)' })
+  @ApiResponse({ status: 200, description: 'Rol de usuario actualizado con éxito' })
+  @ApiResponse({ status: 400, description: 'Solicitud inválida' })
+  @ApiResponse({ status: 401, description: 'No autorizado' })
+  @ApiResponse({ status: 403, description: 'Acceso denegado' })
+  @ApiResponse({ status: 404, description: 'Usuario no encontrado' })
   async updateUserRole(
     @Param('id', ParseMongoIdPipe) id: string,
     @Body() updateUserRoleDto: UpdateUserRoleDto,
@@ -103,39 +103,39 @@ export class UsersController {
       id,
       updateUserRoleDto.role,
     );
-    return { message: 'User role updated successfully', user: updatedUser };
+    return { message: 'Rol de usuario actualizado con éxito', user: updatedUser };
   }
 
   @UseGuards(JwtAuthGuard)
   @Patch('me/change-password')
   @ApiBearerAuth()
-  @ApiOperation({ summary: 'Change current user password' })
-  @ApiResponse({ status: 200, description: 'Password changed successfully' })
-  @ApiResponse({ status: 400, description: 'Bad Request' })
-  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiOperation({ summary: 'Cambiar contraseña del usuario actual' })
+  @ApiResponse({ status: 200, description: 'Contraseña cambiada con éxito' })
+  @ApiResponse({ status: 400, description: 'Solicitud inválida' })
+  @ApiResponse({ status: 401, description: 'No autorizado' })
   @HttpCode(HttpStatus.OK)
   async changePassword(
     @Request() req,
     @Body() changePasswordDto: ChangePasswordDto,
   ) {
     await this.usersService.changePassword(req.user.sub, changePasswordDto);
-    return { message: 'Password changed successfully' };
+    return { message: 'Contraseña cambiada con éxito' };
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(Role.Admin)
   @Post(':id/reset-password')
   @ApiBearerAuth()
-  @ApiOperation({ summary: 'Reset a user password (Admin only)' })
-  @ApiResponse({ status: 200, description: 'Password reset email sent' })
-  @ApiResponse({ status: 401, description: 'Unauthorized' })
-  @ApiResponse({ status: 403, description: 'Forbidden' })
-  @ApiResponse({ status: 404, description: 'User not found' })
+  @ApiOperation({ summary: 'Restablecer contraseña de usuario (Solo Admin)' })
+  @ApiResponse({ status: 200, description: 'Correo de restablecimiento de contraseña enviado' })
+  @ApiResponse({ status: 401, description: 'No autorizado' })
+  @ApiResponse({ status: 403, description: 'Acceso denegado' })
+  @ApiResponse({ status: 404, description: 'Usuario no encontrado' })
   @HttpCode(HttpStatus.OK)
   async adminResetPassword(@Param('id', ParseMongoIdPipe) id: string) {
     await this.usersService.adminResetPassword(id);
     return {
-      message: `Password for user ${id} has been reset and sent via email.`,
+      message: `La contraseña del usuario ${id} ha sido reseteada y enviada por correo.`,
     };
   }
 }

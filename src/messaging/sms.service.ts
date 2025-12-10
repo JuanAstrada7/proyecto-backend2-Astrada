@@ -21,9 +21,9 @@ export class SmsService {
         from,
         to,
       });
-      this.logger.log(`SMS sent successfully to ${to}. SID: ${message.sid}`);
+      this.logger.log(`SMS enviado correctamente a ${to}. SID: ${message.sid}`);
     } catch (error) {
-      this.logger.error(`Failed to send SMS to ${to}`, error);
+      this.logger.error(`Error al enviar SMS a ${to}`, error);
     }
   }
 }

@@ -5,6 +5,6 @@ import { ApiProperty } from '@nestjs/swagger';
 export class UpdateUserRoleDto {
   @ApiProperty({ enum: Role, example: Role.User, description: 'Role del usuario' })
   @IsNotEmpty()
-  @IsEnum(Role, { message: 'Role must be either user or admin' })
+  @IsEnum(Role, { message: 'El rol debe ser "user" o "admin"' })
   readonly role: Role;
 }

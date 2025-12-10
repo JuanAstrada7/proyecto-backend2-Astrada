@@ -77,7 +77,7 @@ export class ProductsService {
   async findOne(id: string): Promise<Product> {
     const product = await this.productModel.findById(id).exec();
     if (!product) {
-      throw new NotFoundException(`Product with ID "${id}" not found`);
+      throw new NotFoundException(`No se encontró el producto con ID "${id}"`);
     }
     return product;
   }
@@ -87,7 +87,7 @@ export class ProductsService {
       .findByIdAndUpdate(id, updateProductDto, { new: true })
       .exec();
     if (!updatedProduct) {
-      throw new NotFoundException(`Product with ID "${id}" not found`);
+      throw new NotFoundException(`No se encontró el producto con ID "${id}"`);
     }
     return updatedProduct;
   }
@@ -95,7 +95,7 @@ export class ProductsService {
   async remove(id: string): Promise<{ deleted: boolean; id: string }> {
     const result = await this.productModel.deleteOne({ _id: id }).exec();
     if (result.deletedCount === 0) {
-      throw new NotFoundException(`Product with ID "${id}" not found`);
+      throw new NotFoundException(`No se encontró el producto con ID "${id}"`);
     }
     return { deleted: true, id };
   }

@@ -35,7 +35,7 @@ export class CartsService {
       .populate('products.product')
       .exec();
     if (!cart) {
-      throw new NotFoundException(`Cart with ID "${id}" not found`);
+      throw new NotFoundException(`No se encontró el carrito con ID "${id}"`);
     }
     return cart;
   }
@@ -80,7 +80,7 @@ export class CartsService {
 
     if (productIndex === -1) {
       throw new NotFoundException(
-        `Product with ID "${productId}" not found in cart`,
+        `Producto con ID "${productId}" no encontrado en el carrito`,
       );
     }
 
@@ -101,7 +101,7 @@ export class CartsService {
   ): Promise<{ ticket: TicketDocument; productsNotPurchased: any[] }> {
     const cart = await this.findOne(cartId);
     if (cart.products.length === 0) {
-      throw new BadRequestException('Cart is empty. Cannot proceed to purchase.');
+      throw new BadRequestException('El carrito está vacío. No se puede proceder con la compra.');
     }
 
     const productsToPurchase: { product: Product; quantity: number }[] = [];
@@ -119,13 +119,13 @@ export class CartsService {
       } else {
         productsNotPurchased.push({
           product: product._id,
-          reason: 'Insufficient stock',
+          reason: 'Stock insuficiente',
         });
       }
     }
 
     if (productsToPurchase.length === 0) {
-      throw new BadRequestException('No products could be purchased due to insufficient stock.');
+      throw new BadRequestException('No se pudieron comprar productos debido a stock insuficiente.');
     }
 
     const ticket = await this.ticketsService.create(totalAmount, purchaserEmail);

@@ -37,7 +37,7 @@ export class UsersService {
   async findOne(id: string): Promise<UserDocument> {
     const user = await this.userModel.findById(id).exec();
     if (!user) {
-      throw new NotFoundException(`User with ID "${id}" not found`);
+      throw new NotFoundException(`No se encontró el usuario con ID "${id}"`);
     }
     return user;
   }
@@ -54,7 +54,7 @@ export class UsersService {
       .exec();
 
     if (!updatedUser) {
-      throw new NotFoundException(`User with ID "${id}" not found`);
+      throw new NotFoundException(`No se encontró el usuario con ID "${id}"`);
     }
     return updatedUser;
   }
@@ -65,7 +65,7 @@ export class UsersService {
   ): Promise<void> {
     const user = await this.userModel.findById(userId).select('+password').exec();
     if (!user) {
-      throw new NotFoundException('User not found');
+      throw new NotFoundException('Usuario no encontrado');
     }
 
     const isPasswordMatching = await bcrypt.compare(
@@ -74,7 +74,7 @@ export class UsersService {
     );
 
     if (!isPasswordMatching) {
-      throw new UnauthorizedException('Invalid current password');
+      throw new UnauthorizedException('Contraseña actual inválida');
     }
 
     user.password = changePasswordDto.newPassword;

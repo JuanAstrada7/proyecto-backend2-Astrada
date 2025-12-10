@@ -79,7 +79,7 @@ export class CartsController {
     }
     if (user.cartId.toString() !== cartId) {
       throw new ForbiddenException(
-        'You are not allowed to perform this action on this cart.',
+        'No tienes permiso para realizar esta acción en este carrito.',
       );
     }
   }
